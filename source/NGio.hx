@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.util.FlxSignal;
 import flixel.util.FlxTimer;
+#if newgrounds 
 import io.newgrounds.NG;
 import io.newgrounds.components.ScoreBoardComponent.Period;
 import io.newgrounds.objects.Medal;
@@ -198,3 +199,4 @@ class NGio
 		}
 	}
 }
+#end
