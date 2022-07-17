@@ -3691,9 +3691,7 @@ class PlayState extends MusicBeatState
 					#end
 
 					if (SONG.validScore)
-					{       #if newgrounds
-						NGio.unlockMedal(60961);
-					        #end
+					{       
 						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 					}
 
@@ -4150,12 +4148,6 @@ class PlayState extends MusicBeatState
 
 		if (!grabbed)
 		{
-		var anas:Array<Ana> = [null, null, null, null];
-
-		for (i in 0...pressArray.length)
-			if (pressArray[i])
-				anas[i] = new Ana(Conductor.songPosition, null, false, "miss", i);
-
 		// HOLDS, check for sustain notes
 		if (holdArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
 		{
@@ -4244,9 +4236,7 @@ class PlayState extends MusicBeatState
 							hit[coolNote.noteData] = true;
 							scoreTxt.color = FlxColor.WHITE;
 							var noteDiff:Float = -(coolNote.strumTime - Conductor.songPosition);
-							anas[coolNote.noteData].hit = true;
-							anas[coolNote.noteData].hitJudge = Ratings.judgeNote(noteDiff);
-							anas[coolNote.noteData].nearestNote = [coolNote.strumTime, coolNote.noteData, coolNote.sustainLength];
+							
 							goodNoteHit(coolNote);
 						}
 					}
@@ -4265,12 +4255,7 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if (!loadRep)
-				for (i in anas)
-					if (i != null)
-						replayAna.anaArray.push(i); // put em all there
-		}
-		if (PlayStateChangeables.botPlay)
+			
 		notes.forEachAlive(function(daNote:Note)
 		{
 			var diff = -(daNote.strumTime - Conductor.songPosition);
