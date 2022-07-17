@@ -23,7 +23,9 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+#if newgrounds 
 import io.newgrounds.NG;
+#end
 import lime.app.Application;
 import openfl.Assets;
 
@@ -58,8 +60,8 @@ class TitleState extends MusicBeatState
 		#end
 		
 		#if sys
-		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
-			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
+		if (!sys.FileSystem.exists(SUtil.getPath() + Sys.getCwd() + "/assets/replays"))
+			sys.FileSystem.createDirectory(SUtil.getPath() + Sys.getCwd() + "/assets/replays");
 		#end
 
 		@:privateAccess
@@ -293,7 +295,7 @@ class TitleState extends MusicBeatState
 
 		if (pressedEnter && !transitioning && skippedIntro)
 		{
-			#if !switch
+			#if (!switch && newgrounds)
 			NGio.unlockMedal(60960);
 
 			// If it's Friday according to da clock
