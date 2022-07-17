@@ -2981,16 +2981,6 @@ class PlayState extends MusicBeatState
 	
 	
 					
-	
-					if (!playedVideo)
-					{
-						new FlxTimer().start(grabbed ? 1 : 0.1,function(timer) {
-							var video:MP4Handler = new MP4Handler();
-	
-							video.playMP4(Paths.video(dad.curCharacter), new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y)); 
-						});
-					}
-	
 					playedVideo = true;
 	
 					#if windows
