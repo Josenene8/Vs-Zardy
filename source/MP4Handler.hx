@@ -1,13 +1,15 @@
 package;
-
-import flixel.FlxG;
-import flixel.FlxState;
-import openfl.events.Event;
+#if web
 import openfl.media.Video;
 import openfl.net.NetConnection;
 import openfl.net.NetStream;
+#else
+import openfl.events.Event;
 import vlc.VlcBitmap;
+#end
 import flixel.FlxSprite;
+import flixel.FlxG;
+import flixel.FlxState;
 
 // THIS IS FOR TESTING
 // DONT STEAL MY CODE >:(
