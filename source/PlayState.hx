@@ -4267,11 +4267,6 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if (!loadRep)
-				for (i in anas)
-					if (i != null)
-						replayAna.anaArray.push(i); // put em all there
-		}
 		if (PlayStateChangeables.botPlay)
 		notes.forEachAlive(function(daNote:Note)
 		{
