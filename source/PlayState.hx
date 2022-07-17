@@ -1051,10 +1051,7 @@ class PlayState extends MusicBeatState
 		kadeEngineWatermark.cameras = [camHUD];
 		if (loadRep)
 			replayTxt.cameras = [camHUD];
-			   
-                #if android
-	        addAndroidControls();
-	#end
+
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
@@ -1186,11 +1183,7 @@ class PlayState extends MusicBeatState
 	#end
 
 	function startCountdown():Void
-	{  
-		#if android
-	        androidc.visible = true;
-	        #end
-			
+	{
 		inCutscene = false;
 		canPause = true;
 
@@ -1691,7 +1684,7 @@ class PlayState extends MusicBeatState
 
 		var songPath = 'assets/data/' + songLowercase + '/';
 		
-		#if windows
+		#if sys
 		if (isSM && !isStoryMode)
 			songPath = pathToSm;
 		#end
@@ -3591,7 +3584,14 @@ class PlayState extends MusicBeatState
 		}
 
 
-		
+		if (!loadRep)
+			rep.SaveReplay(saveNotes, saveJudge, replayAna);
+		else
+		{
+			PlayStateChangeables.botPlay = false;
+			PlayStateChangeables.scrollSpeed = 1;
+			PlayStateChangeables.useDownscroll = false;
+		}
 
 		if (FlxG.save.data.fpsCap > 290)
 			(cast(Lib.current.getChildAt(0), Main)).setFPSCap(290);
@@ -3702,10 +3702,8 @@ class PlayState extends MusicBeatState
 					#end
 
 					if (SONG.validScore)
-					{    
-						#if newgrounds
+					{
 						NGio.unlockMedal(60961);
-					        #end
 						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 					}
 
@@ -4160,7 +4158,14 @@ class PlayState extends MusicBeatState
 			releaseArray = [false, false, false, false];
 		}
 
-		
+		if (!grabbed)
+		{
+		var anas:Array<Ana> = [null, null, null, null];
+
+		for (i in 0...pressArray.length)
+			if (pressArray[i])
+				anas[i] = new Ana(Conductor.songPosition, null, false, "miss", i);
+
 		// HOLDS, check for sustain notes
 		if (holdArray.contains(true) && /*!boyfriend.stunned && */ generatedMusic)
 		{
@@ -4173,9 +4178,11 @@ class PlayState extends MusicBeatState
 			});
 		}
 
-		// PRESSES, check for note hits
-		if (pressArray.contains(true) && generatedMusic)
+		if ((KeyBinds.gamepad && !FlxG.keys.justPressed.ANY))
 		{
+			// PRESSES, check for note hits
+			if (pressArray.contains(true) && generatedMusic)
+			{
 				boyfriend.holdTimer = 0;
 
 				var possibleNotes:Array<Note> = []; // notes that can be hit
@@ -4248,7 +4255,9 @@ class PlayState extends MusicBeatState
 							hit[coolNote.noteData] = true;
 							scoreTxt.color = FlxColor.WHITE;
 							var noteDiff:Float = -(coolNote.strumTime - Conductor.songPosition);
-							
+							anas[coolNote.noteData].hit = true;
+							anas[coolNote.noteData].hitJudge = Ratings.judgeNote(noteDiff);
+							anas[coolNote.noteData].nearestNote = [coolNote.strumTime, coolNote.noteData, coolNote.sustainLength];
 							goodNoteHit(coolNote);
 						}
 					}
@@ -4267,6 +4276,11 @@ class PlayState extends MusicBeatState
 				}
 			}
 
+			if (!loadRep)
+				for (i in anas)
+					if (i != null)
+						replayAna.anaArray.push(i); // put em all there
+		}
 		if (PlayStateChangeables.botPlay)
 		notes.forEachAlive(function(daNote:Note)
 		{
@@ -4403,7 +4417,18 @@ class PlayState extends MusicBeatState
 
 	public function backgroundVideo(source:String) // for background videos
 	{
-		
+		#if cpp
+		useVideo = true;
+		var video:MP4Handler = new MP4Handler();
+
+		videoSprite = new FlxSprite(0,0);
+		videoSprite.scrollFactor.set();
+		videoSprite.cameras = [camHUD];
+
+		video.playMP4(Paths.video(source),null, videoSprite);
+
+		trace('poggers');
+		#end
 	}
 
 	function noteMiss(direction:Int = 1, daNote:Note):Void
