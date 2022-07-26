@@ -4138,12 +4138,7 @@ class PlayState extends MusicBeatState
 		};
 		#end
 
-		// Prevent player input if botplay is on
-		if (PlayStateChangeables.botPlay)
-		{
-			holdArray = [false, false, false, false];
-			pressArray = [false, false, false, false];
-			releaseArray = [false, false, false, false];
+		
 		}
 
 		if (!grabbed)
