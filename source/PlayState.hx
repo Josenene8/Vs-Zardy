@@ -4139,7 +4139,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		
-		}
+		
 
 		if (!grabbed)
 		{
